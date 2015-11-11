@@ -70,3 +70,30 @@ for ( i in 1:4) {
     print(intersect(espl[[i]], espl[[j]]))
   }
 }
+
+download.file(url = "http://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv",
+                                      destfile = "data/wl.csv")
+
+require(lattice)
+xtabs(~user_name + total_accel_belt, data = wl)
+isInt <- sapply(wl, is.integer)
+data.frame(names = names(wl), integer = res)
+
+inVars <- names(wl)[isInt]
+mat <- matrix(rep(0,length(inVars)*10), ncol = 10)
+for (k in 1:length(inVars)) {
+  espl <- split(wl[, inVars[k]], f = wl$classe)
+  lens <- numeric(0)
+  for ( i in 1:4) {
+    for ( j in (i+1):5) {
+      lens <- c(lens, length(intersect(espl[[i]], espl[[j]])))
+    }
+  }
+  mat[k, ] <- lens
+}
+rownames(mat) <- inVars
+w5 <- wl[, inVars]
+nunique <- sapply(w5, function(x) length(unique(x)))
+mat <- cbind(mat, nunique)
+mat
+
