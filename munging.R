@@ -97,3 +97,13 @@ nunique <- sapply(w5, function(x) length(unique(x)))
 mat <- cbind(mat, nunique)
 mat
 
+###################
+# try to identify sets, or lifts
+#################
+library(dplyr)
+wl2 <- wl%>% mutate(date = as.Date(cvtd_timestamp, format = "%d/%m/%Y %H:%M"))
+wl2 <- wl2 %>% select(user_name, raw_timestamp_part_1, raw_timestamp_part_2, cvtd_timestamp,new_window,num_window, classe,date)
+wl2 <- wl2 %>% mutate(timediff = lead(date,1)-date)
+wlsub <- split(wl2,f = factor(wl2$user_name))
+table(wlsub[[6]]$date)
+head(wlsub[[1]])
